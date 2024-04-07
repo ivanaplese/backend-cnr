@@ -15,6 +15,7 @@ app.post('/user', (req, res) => {
     res.status(201).json(newUser);
 });
 
+
 // Pregled svih korisnika
 app.get('/user', (req, res) => res.json(user));
 
@@ -58,3 +59,4 @@ app.post('/voznja/:voznjaId/join', (req, res) => {
 });
 
 app.listen(port, () => console.log(`Server sluša na portu ${port}`));
+
