@@ -21,18 +21,20 @@ async function establishConnection() {
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
 
-        // Postavite db nakon uspostavljanja veze s bazom podataka
+
         db = client.db("cnr");
     } finally {
-        // Ensures that the client will close when you finish/error
+
         await client.close();
     }
 }
 
-// Izložite db izvan run() funkcije
+
 function getDb() {
     return db;
 }
 
-// Izvezi funkciju establishConnection i db objekt
+
+
 export { establishConnection, getDb };
+export default db;

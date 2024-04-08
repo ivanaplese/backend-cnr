@@ -1,6 +1,8 @@
 import express from "express";
 import cors from "cors";
 import { establishConnection, getDb } from "./db/connection.js";
+import { MongoClient } from 'mongodb';
+import { userMethods } from "../Handlers/userHandler.js";
 
 const app = express();
 const port = 3000;
@@ -10,12 +12,86 @@ await establishConnection();
 app.use(express.json());
 app.use(cors());
 
+// app.post("/api/register", async (req, res) => {
+//     try {
+//         const db = getDb();
+//         const { username, password } = req.body;
 
-app.get('/users', async (req, res) => {
-    const db = getDb(); // Dohvati db objekt iz connection.js
-    const user = await db.collection("user").find().toArray();
-    res.json(user);
+//         // Provjerite postoji li korisnik s istim korisničkim imenom
+//         const existingUser = await db.collection("user").findOne({ username });
+
+//         if (existingUser) {
+//             return res.status(400).json({ error: "Korisnik već postoji" });
+//         }
+
+//         // Ako korisnik ne postoji, spremite novog korisnika u bazu podataka
+//         await db.collection("user").insertOne({ username, password });
+
+//         res.status(201).json({ message: "Registracija uspješna" });
+//     } catch (error) {
+//         console.error("Greška prilikom registracije korisnika", error);
+//         res.status(500).json({ error: "Došlo je do interne greške prilikom registracije korisnika" });
+//     }
+// });
+
+app.post("/user", async (req, res) => {
+    let userData = req.body;
+
+    try {
+        await auth.registerUser(userData);
+        res.status(201).json({ message: "user je uspješno dodan." });
+    } catch (e) {
+        if (e.message === "username already exists") {
+            res.status(409).json({ error: e.message });
+        } else {
+            res.status(500).json({ error: "Internal Server Error" });
+        }
+    }
 });
+
+
+app.post("/user", userMethods.newUser);
+
+
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
+
+/*
+// // Ruta za registraciju korisnika 1
+// app.post("/register", async (req, res) => {
+//     try {
+//         const db = getDb();
+//         const { username, password } = req.body;
+
+//         // Provjerite postoji li korisnik s istim korisničkim imenom
+//         const existingUser = await db.collection("user").findOne({ username });
+
+//         if (existingUser) {
+//             return res.status(400).json({ error: "Korisnik već postoji" });
+//         }
+
+//         // Ako korisnik ne postoji, spremite novog korisnika u bazu podataka
+//         await db.collection("user").insertOne({ username, password });
+
+//         res.status(201).json({ message: "Registracija uspješna" });
+//     } catch (error) {
+//         console.error("Greška prilikom registracije korisnika", error);
+//         res.status(500).json({ error: "Došlo je do interne greške prilikom registracije korisnika" });
+//     }
+// });
+
+
+// ruta 2
+
+
+
+// app.get('/users', async (req, res) => {
+//     const db = getDb(); // Dohvati db objekt iz connection.js
+//     const user = await db.collection("user").find().toArray();
+//     res.json(user);
+// });
 
 
 // // Dodavanje novog korisnika
@@ -70,5 +146,5 @@ app.get('/users', async (req, res) => {
 
 
 app.listen(port, () => {
-    console.log(`Server is running on port ${port}`);
-});
+  console.log(`Server is running on port ${port}`);
+}); */
