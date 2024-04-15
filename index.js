@@ -1,38 +1,16 @@
 import express from "express";
 import cors from "cors";
-import { establishConnection, getDb } from "./db/connection.js";
 import { MongoClient } from 'mongodb';
-import { userMethods } from "../Handlers/userHandler.js";
+import { userMethods } from "./Handlers/userHandler.js";
+import db from "./db/connection.js";
 
 const app = express();
 const port = 3000;
 
-await establishConnection();
 
 app.use(express.json());
 app.use(cors());
 
-// app.post("/api/register", async (req, res) => {
-//     try {
-//         const db = getDb();
-//         const { username, password } = req.body;
-
-//         // Provjerite postoji li korisnik s istim korisničkim imenom
-//         const existingUser = await db.collection("user").findOne({ username });
-
-//         if (existingUser) {
-//             return res.status(400).json({ error: "Korisnik već postoji" });
-//         }
-
-//         // Ako korisnik ne postoji, spremite novog korisnika u bazu podataka
-//         await db.collection("user").insertOne({ username, password });
-
-//         res.status(201).json({ message: "Registracija uspješna" });
-//     } catch (error) {
-//         console.error("Greška prilikom registracije korisnika", error);
-//         res.status(500).json({ error: "Došlo je do interne greške prilikom registracije korisnika" });
-//     }
-// });
 
 app.post("/user", async (req, res) => {
     let userData = req.body;
@@ -52,6 +30,7 @@ app.post("/user", async (req, res) => {
 
 app.post("/user", userMethods.newUser);
 
+app.get("/user", userMethods.GetUser);
 
 
 app.listen(port, () => {

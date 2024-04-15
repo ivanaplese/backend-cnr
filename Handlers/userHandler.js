@@ -1,7 +1,6 @@
 import db from "../db/connection.js";
 
-
-const userCollection = db.collection("User");
+const userCollection = db.collection("user");
 
 
 // Dodavanje novog usera
@@ -20,6 +19,17 @@ export const newUser = async (req, res) => {
     }
 };
 
+export const GetUser = async (req, res) => {
+    try {
+        const result = await userCollection.find().toArray();
+        res.json()
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 export const userMethods = {
     newUser,
+    GetUser,
 };
