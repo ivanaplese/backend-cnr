@@ -22,7 +22,7 @@ export const newUser = async (req, res) => {
 export const GetUser = async (req, res) => {
     try {
         const result = await userCollection.find().toArray();
-        res.json()
+        res.json(result)
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
