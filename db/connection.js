@@ -88,6 +88,7 @@
 import { MongoClient } from "mongodb";
 
 const connectionString = "mongodb+srv://test:test@cluster0.vinwyba.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+
 const client = new MongoClient(connectionString);
 let conn = null;
 

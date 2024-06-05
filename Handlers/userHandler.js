@@ -1,13 +1,25 @@
 import db from "../db/connection.js";
+import { ObjectId } from "mongodb";
 
 const userCollection = db.collection("user");
 
+// ispis usera
+export const getUser = async (req, res) => {
+    try {
+        const result = await userCollection.find().toArray();
+        res.json(result)
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
 
-// Dodavanje novog usera
+
+// dodavanje novog usera
 export const newUser = async (req, res) => {
     const { username, password } = req.body;
     try {
         const result = await userCollection.insertOne({
+            _id: new ObjectId(),
             username,
             password
         });
@@ -19,10 +31,30 @@ export const newUser = async (req, res) => {
     }
 };
 
-export const GetUser = async (req, res) => {
+// trazenje jednog usera prema id-u
+export const getUserById = async (req, res) => {
+    const userId = req.params.id;
+
     try {
-        const result = await userCollection.find().toArray();
-        res.json(result)
+        const user = await userCollection.findOne({ _id: new ObjectId(userId) });
+        if (!user) {
+            return res.status(404).json({ message: "Korisnik nije pronađen." });
+        }
+        res.json(user);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+// trazenje usera po username-u
+export const getUserByUsername = async (req, res) => {
+    const username = req.params.username;
+    try {
+        const user = await userCollection.findOne({ username });
+        if (!user) {
+            return res.status(404).json({ message: "Korisnik nije pronađen." });
+        }
+        res.json(user);
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -31,5 +63,7 @@ export const GetUser = async (req, res) => {
 
 export const userMethods = {
     newUser,
-    GetUser,
+    getUser,
+    getUserById,
+    getUserByUsername
 };
