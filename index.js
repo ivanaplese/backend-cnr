@@ -1,21 +1,19 @@
 import express from "express";
 import cors from "cors";
-//import { MongoClient } from 'mongodb';
 import { userMethods } from "./Handlers/userHandler.js";
 import { rideMethods } from "./Handlers/rideHandler.js";
 import { reservationMethods } from "./Handlers/reservationHandler.js";
-
-//import db from "./db/connection.js";
 import dotenv from "dotenv";
 import auth from "./auth.js";
 
 const app = express();
-const port = 3000; //port na kojem je server
+const port = 3000;
 
 
 app.use(express.json());
 app.use(cors());
 dotenv.config();
+
 
 //USER RUTE
 
@@ -74,6 +72,20 @@ app.get("/rezervacija/user/:userId", reservationMethods.getReservationsByUserId)
 app.get("/rezervacija/voznja/:rideId", reservationMethods.getReservationsByRideId); //pretraživanje voznnje po ride id
 app.delete("/rezervacija/:id", reservationMethods.deleteReservation); //brisanje voznje
 
+
+
+app.post("/auth", async (req, res) => {
+    let userData = req.body;
+    try {
+        const result = await auth.loginUser(
+            userData.username,
+            userData.password
+        );
+        return res.json({ token: result.token });
+    } catch (error) {
+        return res.status(403).json({ error: error.message });
+    }
+});
 
 
 app.listen(port, () => {
