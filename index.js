@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 //import { MongoClient } from 'mongodb';
 import { userMethods } from "./Handlers/userHandler.js";
+import { rideMethods } from "./Handlers/rideHandler.js";
+
 //import db from "./db/connection.js";
 import dotenv from "dotenv";
 import auth from "./auth.js";
@@ -14,7 +16,10 @@ app.use(express.json());
 app.use(cors());
 dotenv.config();
 
+//USER RUTE
+
 //user registracija
+
 app.post("/register", async (req, res) => {
     let userData = req.body;
 
@@ -31,6 +36,7 @@ app.post("/register", async (req, res) => {
 });
 
 // user login
+
 app.post("/login", async (req, res) => {
     const userData = req.body;
 
@@ -46,17 +52,22 @@ app.post("/login", async (req, res) => {
     }
 });
 
-// ispis usera
-app.get("/user", userMethods.getUser);
 
-//dodavanje novog usera
-app.post("/user", userMethods.newUser);
+app.get("/user", userMethods.getUser); // ispis usera
+app.post("/user", userMethods.newUser); //dodavanje novog usera
+app.get("/user/:id", userMethods.getUserById); // dohvaćanje usera po id-u
+app.get("/user/username/:username", userMethods.getUserByUsername); // dohvaćanje usera po username-u
 
-// dohvaćanje usera po id-u
-app.get("/user/:id", userMethods.getUserById);
 
-// dohvaćanje usera po username-u
-app.get("/user/username/:username", userMethods.getUserByUsername);
+//RUTE ZA VOŽNJE
+
+app.post("/voznja", rideMethods.addRide); //ruta za dodavanje vožnja
+app.get("/voznja", rideMethods.searchRides); //pretraživanje vožnja
+app.get("/voznja/:id", rideMethods.getRideById); //pretraživanje vožnje po idu
+app.put("/voznja/:id", rideMethods.updateRide); //update vožnje po idu
+app.delete("/voznja/:id", rideMethods.deleteRide); //brisanje vožnje po idu
+
+
 
 
 app.listen(port, () => {

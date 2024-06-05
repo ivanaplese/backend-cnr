@@ -1,5 +1,4 @@
 import mongo from "mongodb";
-// import db from "../db/connection.js";
 import db from "./db/connection.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -38,7 +37,7 @@ const auth = {
                 throw new Error("Invalid password");
             }
 
-            // Generisanje JWT tokena
+            // generiranje JWT tokena
             const token = jwt.sign(
                 { userId: user._id, username: user.username },
                 process.env.JWT_SECRET,
