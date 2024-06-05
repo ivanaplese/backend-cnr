@@ -3,6 +3,7 @@ import cors from "cors";
 //import { MongoClient } from 'mongodb';
 import { userMethods } from "./Handlers/userHandler.js";
 import { rideMethods } from "./Handlers/rideHandler.js";
+import { reservationMethods } from "./Handlers/reservationHandler.js";
 
 //import db from "./db/connection.js";
 import dotenv from "dotenv";
@@ -67,6 +68,11 @@ app.get("/voznja/:id", rideMethods.getRideById); //pretraživanje vožnje po idu
 app.put("/voznja/:id", rideMethods.updateRide); //update vožnje po idu
 app.delete("/voznja/:id", rideMethods.deleteRide); //brisanje vožnje po idu
 
+// RUTE ZA REZERVACIJE
+app.post("/rezervacija", reservationMethods.addReservation); //dodavanje rezervacije
+app.get("/rezervacija/user/:userId", reservationMethods.getReservationsByUserId); //pretrazivanje po user id , nisam sigurna jel radi- izbacuje prazno
+app.get("/rezervacija/voznja/:rideId", reservationMethods.getReservationsByRideId); //pretraživanje voznnje po ride id
+app.delete("/rezervacija/:id", reservationMethods.deleteReservation); //brisanje voznje
 
 
 
