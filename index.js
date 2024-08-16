@@ -5,6 +5,7 @@ import { rideMethods } from "./Handlers/rideHandler.js";
 import { reservationMethods } from "./Handlers/reservationHandler.js";
 import dotenv from "dotenv";
 import auth from "./auth.js";
+import jwt from 'jsonwebtoken';
 
 const app = express();
 const port = 3000;
@@ -63,7 +64,7 @@ app.use('/api', (router) => {
 
     //RUTE ZA VOŽNJE
 
-    app.post("/voznja", rideMethods.addRide); //ruta za dodavanje vožnja
+    app.post("/voznja", authenticateToken, rideMethods.addRide); //ruta za dodavanje vožnja
     app.get("/voznja", rideMethods.searchRides); //pretraživanje vožnja
     app.get("/voznja/:id", rideMethods.getRideById); //pretraživanje vožnje po idu
     app.put("/voznja/:id", rideMethods.updateRide); //update vožnje po idu
@@ -95,4 +96,19 @@ app.use('/api', (router) => {
         console.log(`Server is running on port ${port}`);
     });
 });
+
+
+// Middleware za autentifikaciju
+const authenticateToken = (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) return res.sendStatus(401); // Ako nema tokena, vrati 401 Unauthorized
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+        if (err) return res.sendStatus(403); // Ako token nije važeći, vrati 403 Forbidden
+        req.user = user; // Spremi korisničke podatke u request objekt
+        next(); // Nastavi s izvođenjem rute
+    });
+};
 
