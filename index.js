@@ -8,12 +8,20 @@ import auth from "./auth.js";
 import jwt from 'jsonwebtoken';
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+});
 
 app.use(express.json());
 app.use(cors());
 dotenv.config();
+
+app.use(cors({
+    origin: 'https://cars-n-rides.netlify.app/'
+}));
+
 
 
 
@@ -92,23 +100,20 @@ app.use('/api', (router) => {
     });
 
 
-    app.listen(port, () => {
-        console.log(`Server is running on port ${port}`);
-    });
+
+
+    // Middleware za autentifikaciju
+    const authenticateToken = (req, res, next) => {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+
+        if (!token) return res.sendStatus(401); // Ako nema tokena, vrati 401 Unauthorized
+
+        jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+            if (err) return res.sendStatus(403); // Ako token nije važeći, vrati 403 Forbidden
+            req.user = user; // Spremi korisničke podatke u request objekt
+            next(); // Nastavi s izvođenjem rute
+        });
+    };
+
 });
-
-
-// Middleware za autentifikaciju
-const authenticateToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-
-    if (!token) return res.sendStatus(401); // Ako nema tokena, vrati 401 Unauthorized
-
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403); // Ako token nije važeći, vrati 403 Forbidden
-        req.user = user; // Spremi korisničke podatke u request objekt
-        next(); // Nastavi s izvođenjem rute
-    });
-};
-
