@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
 
-const userCollection = db.collection("user");
+// const userCollection = db.collection("user");
 
 
 const auth = {

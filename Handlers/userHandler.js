@@ -1,11 +1,15 @@
 import db from "../db/connection.js";
 import { ObjectId } from "mongodb";
 
-const userCollection = db.collection("user");
+// const userCollection = db.collection("user");
 
 // ispis usera
 export const getUser = async (req, res) => {
     try {
+        //novo
+        const db = await connectToDatabase();
+        const userCollection = db.collection("user");
+        //
         const result = await userCollection.find().toArray();
         res.json(result)
     } catch (error) {
@@ -18,6 +22,10 @@ export const getUser = async (req, res) => {
 export const newUser = async (req, res) => {
     const { username, password } = req.body;
     try {
+        //
+        const db = await connectToDatabase();
+        const userCollection = db.collection("user");
+        //
         const result = await userCollection.insertOne({
             _id: new ObjectId(),
             username,
@@ -36,6 +44,10 @@ export const getUserById = async (req, res) => {
     const userId = req.params.id;
 
     try {
+        //
+        const db = await connectToDatabase();
+        const userCollection = db.collection("user");
+        //
         const user = await userCollection.findOne({ _id: new ObjectId(userId) });
         if (!user) {
             return res.status(404).json({ message: "Korisnik nije pronađen." });
@@ -50,6 +62,10 @@ export const getUserById = async (req, res) => {
 export const getUserByUsername = async (req, res) => {
     const username = req.params.username;
     try {
+        //
+        const db = await connectToDatabase();
+        const userCollection = db.collection("user");
+        //
         const user = await userCollection.findOne({ username });
         if (!user) {
             return res.status(404).json({ message: "Korisnik nije pronađen." });

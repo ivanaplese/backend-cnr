@@ -1,7 +1,7 @@
 import db from "../db/connection.js";
 import { ObjectId } from "mongodb";
 
-const rideCollection = db.collection("ride");
+// const rideCollection = db.collection("ride");
 
 // Dodavanje nove vožnje
 export const addRide = async (req, res) => {
