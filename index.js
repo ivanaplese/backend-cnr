@@ -1,28 +1,33 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 import { userMethods } from "./Handlers/userHandler.js";
 import { rideMethods } from "./Handlers/rideHandler.js";
 import { reservationMethods } from "./Handlers/reservationHandler.js";
-import dotenv from "dotenv";
 import auth from "./auth.js";
 import jwt from 'jsonwebtoken';
 
+dotenv.config();
+
 const app = express();
 const port = process.env.PORT || 3000;
+
+// CORS middleware
+app.use(cors({
+    origin: ['https://cars-n-rides.netlify.app', 'http://localhost:8080'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    credentials: true
+}));
+
+app.use(express.json());
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
 
-app.use(express.json());
-app.use(cors());
-dotenv.config();
-
-app.use(cors({
-    origin: 'https://cars-n-rides.netlify.app/'
-}));
-
-
+// app.use(cors({
+//     origin: 'https://cars-n-rides.netlify.app/'
+// }));
 
 
 //USER RUTE
