@@ -1,8 +1,6 @@
 import db from "../db/connection.js";
 import { ObjectId } from "mongodb";
 
-// const reservationCollection = db.collection("reservation");
-
 // Dodavanje nove rezervacije
 export const addReservation = async (req, res) => {
     const { userId, rideId } = req.body;
