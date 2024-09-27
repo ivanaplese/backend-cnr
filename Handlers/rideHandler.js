@@ -52,6 +52,7 @@ export const addRide = async (req, res) => {
 //         res.status(500).json({ error: error.message });
 //     }
 // };
+
 export const searchRides = async (req, res) => {
     const { origin, destination, date } = req.query;
     try {
