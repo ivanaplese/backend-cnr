@@ -20,7 +20,7 @@ async function getUserCollection() {
 
 // Dodavanje nove vožnje
 export const addRide = async (req, res) => {
-    const { origin, destination, date } = req.body;
+    const { origin, destination, date, userId } = req.body;
 
     try {
         const rideCollection = await getRideCollection(); // Fetch collection
@@ -29,6 +29,7 @@ export const addRide = async (req, res) => {
             origin,
             destination,
             date: new Date(date),
+            userId: new ObjectId(userId)
         });
         res.status(201).json({ message: "Vožnja je uspješno dodana.", id: result.insertedId });
     } catch (error) {
