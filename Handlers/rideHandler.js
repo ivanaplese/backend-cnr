@@ -11,6 +11,13 @@ async function getRideCollection() {
     return rideCollection;
 }
 
+
+async function getUserCollection() {
+    const database = await db(); // Povezivanje s bazom podataka
+    return database.collection("user"); // Vrati kolekciju korisnika
+}
+
+
 // Dodavanje nove vožnje
 export const addRide = async (req, res) => {
     const { origin, destination, date } = req.body;
@@ -78,11 +85,18 @@ export const searchRides = async (req, res) => {
 
 // Dohvaćanje vožnji za određenog korisnika
 export const getRidesByUser = async (req, res) => {
-    const { userId } = req.query; // Dohvaćanje userId iz query parametra
+    const { username } = req.query; // Dohvaćanje username-a iz query parametra
 
     try {
+        const userCollection = await getUserCollection(); // Pretpostavimo da imaš kolekciju korisnika
+        const user = await userCollection.findOne({ username }); // Dohvaćanje korisnika prema username-u
+
+        if (!user) {
+            return res.status(404).json({ message: "Korisnik nije pronađen." });
+        }
+
         const rideCollection = await getRideCollection(); // Fetch collection
-        const rides = await rideCollection.find({ userId: new ObjectId(userId) }).toArray();
+        const rides = await rideCollection.find({ userId: user._id }).toArray(); // Koristi user._id
 
         if (rides.length === 0) {
             return res.status(404).json({ message: "Nema dostupnih vožnji za ovog korisnika." });
@@ -94,6 +108,7 @@ export const getRidesByUser = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 
 
