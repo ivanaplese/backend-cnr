@@ -15,7 +15,7 @@ const port = process.env.PORT || 8080;
 // CORS middleware
 app.use(cors({
     origin: ['https://cars-n-rides.netlify.app', 'http://localhost:8080', 'http://localhost:8081'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    methods: ['GET,HEAD,PUT,PATCH,POST,DELETE'],
     credentials: true
 }));
 
@@ -69,6 +69,7 @@ router.post("/user", userMethods.newUser); // Add new user
 router.get("/user/:id", userMethods.getUserById); // Get user by ID
 router.get("/user/username/:username", userMethods.getUserByUsername); // Get user by username
 
+
 // RIDE ROUTES
 
 router.post("/voznja", rideMethods.addRide); // Add ride
@@ -76,27 +77,29 @@ router.get("/voznja", rideMethods.searchRides); // Search rides
 router.get("/voznja/:id", rideMethods.getRideById); // Get ride by ID
 router.put("/voznja/:id", rideMethods.updateRide); // Update ride by ID
 router.delete("/voznja/:id", rideMethods.deleteRide); // Delete ride by ID
+router.get("/user-rides", rideMethods.getRidesByUser);
 
 // RESERVATION ROUTES
 router.post("/rezervacija", reservationMethods.addReservation); // Add reservation
 router.get("/rezervacija/voznja/:rideId", reservationMethods.getReservationsByRideId); // Get reservations by ride ID
 router.delete("/rezervacija/:id", reservationMethods.deleteReservation); // Delete reservation
 
-// Middleware for authentication
-/*const authenticateToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
 
-    if (!token) return res.sendStatus(401); // No token, return 401 Unauthorized
+// // Middleware for authentication
+// const authenticateToken = (req, res, next) => {
+//     const authHeader = req.headers['authorization'];
+//     const token = authHeader && authHeader.split(' ')[1];
 
-    jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-        if (err) return res.sendStatus(403); // Invalid token, return 403 Forbidden
-        req.user = user; // Store user info in request
-        next(); // Proceed to the next middleware/route
-    });
-};
+//     if (!token) return res.sendStatus(401); // No token, return 401 Unauthorized
 
-*/
+//     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+//         if (err) return res.sendStatus(403); // Invalid token, return 403 Forbidden
+//         req.user = user; // Store user info in request
+//         next(); // Proceed to the next middleware/route
+//     });
+// };
+
+
 
 // Use the router for API routes
 app.use('/api', router);

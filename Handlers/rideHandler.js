@@ -76,6 +76,26 @@ export const searchRides = async (req, res) => {
     }
 };
 
+// Dohvaćanje vožnji za određenog korisnika
+export const getRidesByUser = async (req, res) => {
+    const { userId } = req.query; // Dohvaćanje userId iz query parametra
+
+    try {
+        const rideCollection = await getRideCollection(); // Fetch collection
+        const rides = await rideCollection.find({ userId: new ObjectId(userId) }).toArray();
+
+        if (rides.length === 0) {
+            return res.status(404).json({ message: "Nema dostupnih vožnji za ovog korisnika." });
+        }
+
+        res.json(rides);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 
 // Dohvaćanje pojedinačne vožnje po ID-u
 export const getRideById = async (req, res) => {
@@ -129,6 +149,7 @@ export const deleteRide = async (req, res) => {
 export const rideMethods = {
     addRide,
     searchRides,
+    getRidesByUser,
     getRideById,
     updateRide,
     deleteRide,
