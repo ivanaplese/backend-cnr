@@ -1,18 +1,26 @@
-import mongo from "mongodb";
-import db from "./db/connection.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { ObjectId } from "mongodb";
+import connectDB from "./db/connection.js"; // Correctly importing connectDB
 
-// const userCollection = db.collection("user");
+let userCollection;
 
+async function getUserCollection() {
+    if (!userCollection) {
+        const db = await connectDB(); // Await the MongoDB connection
+        userCollection = db.collection("user"); // Initialize userCollection
+    }
+    return userCollection;
+}
 
 const auth = {
     async registerUser(userData) {
-        // Hashiranje lozinke
+        const userCollection = await getUserCollection();
+
+        // Hash the password
         const hashedPassword = await bcrypt.hash(userData.password, 10);
         try {
-            // Ubacivanje novog korisnika
+            // Insert a new user into the collection
             await userCollection.insertOne({
                 _id: new ObjectId(),
                 username: userData.username,
@@ -24,20 +32,22 @@ const auth = {
     },
 
     async loginUser(userData) {
+        const userCollection = await getUserCollection();
+
         try {
-            // Pronalaženje korisnika prema username-u
+            // Find the user by username
             const user = await userCollection.findOne({ username: userData.username });
             if (!user) {
                 throw new Error("User not found");
             }
 
-            // Provjera lozinke
+            // Check if the password is correct
             const isPasswordValid = await bcrypt.compare(userData.password, user.password);
             if (!isPasswordValid) {
                 throw new Error("Invalid password");
             }
 
-            // generiranje JWT tokena
+            // Generate JWT token
             const token = jwt.sign(
                 { userId: user._id, username: user.username },
                 process.env.JWT_SECRET,
