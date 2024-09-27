@@ -13,22 +13,42 @@ async function getRideCollection() {
 
 // Dodavanje nove vožnje
 export const addRide = async (req, res) => {
-    const { origin, destination, date } = req.body;
+    const { origin, destination, date, userId } = req.body; // userId from request
 
     try {
-        const rideCollection = await getRideCollection(); // Fetch collection
+        const rideCollection = await getRideCollection();
         const result = await rideCollection.insertOne({
             _id: new ObjectId(),
             origin,
             destination,
             date: new Date(date),
+            userId: new ObjectId(userId), // Add userId here
         });
-        res.status(201).json({ message: "Vožnja je uspješno dodana.", id: result.insertedId });
+        res.status(201).json({ message: "Ride successfully added.", id: result.insertedId });
     } catch (error) {
         console.log(error);
         res.status(500).json({ error: error.message });
     }
 };
+
+// // Dodavanje nove vožnje
+// export const addRide = async (req, res) => {
+//     const { origin, destination, date } = req.body;
+
+//     try {
+//         const rideCollection = await getRideCollection(); // Fetch collection
+//         const result = await rideCollection.insertOne({
+//             _id: new ObjectId(),
+//             origin,
+//             destination,
+//             date: new Date(date),
+//         });
+//         res.status(201).json({ message: "Vožnja je uspješno dodana.", id: result.insertedId });
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).json({ error: error.message });
+//     }
+// };
 
 // Pretraživanje vožnji po polazištu, odredištu i datumu
 export const searchRides = async (req, res) => {
@@ -100,10 +120,28 @@ export const deleteRide = async (req, res) => {
     }
 };
 
+export const getRidesByUserId = async (req, res) => {
+    const userId = req.params.userId;
+
+    try {
+        const rideCollection = await getRideCollection();
+        const rides = await rideCollection.find({ userId: new ObjectId(userId) }).toArray();
+
+        if (rides.length === 0) {
+            return res.status(404).json({ message: "No rides found for this user." });
+        }
+        res.json(rides);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+};
+
+
 export const rideMethods = {
     addRide,
     searchRides,
     getRideById,
     updateRide,
     deleteRide,
+    getRidesByUserId
 };
