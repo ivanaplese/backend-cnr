@@ -76,8 +76,6 @@ router.get("/voznja", rideMethods.searchRides); // Search rides
 router.get("/voznja/:id", rideMethods.getRideById); // Get ride by ID
 router.put("/voznja/:id", rideMethods.updateRide); // Update ride by ID
 router.delete("/voznja/:id", rideMethods.deleteRide); // Delete ride by ID
-router.get("/voznja/user/:userId", rideMethods.getRidesByUserId); // Fetch rides by user
-
 
 // RESERVATION ROUTES
 router.post("/rezervacija", reservationMethods.addReservation); // Add reservation
