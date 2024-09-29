@@ -13,7 +13,7 @@ const port = process.env.PORT || 8080;
 
 // CORS middleware
 app.use(cors({
-    origin: ['http://localhost:8080', 'http://localhost:8081'],
+    origin: ['http://localhost:8080', 'http://localhost:8081', 'cars-n-rides.netlify.app'],
     methods: ['GET,HEAD,PUT,PATCH,POST,DELETE'],
     credentials: true
 }));
