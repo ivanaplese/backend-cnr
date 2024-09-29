@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { userMethods } from "./Handlers/userHandler.js";
 import { rideMethods } from "./Handlers/rideHandler.js";
-import { reservationMethods } from "./Handlers/reservationHandler.js";
+// import { reservationMethods } from "./Handlers/reservationHandler.js";
 import auth from "./auth.js";
 
 dotenv.config();
