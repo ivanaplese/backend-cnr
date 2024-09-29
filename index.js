@@ -13,7 +13,7 @@ const port = process.env.PORT || 8080;
 
 // CORS middleware
 app.use(cors({
-    origin: ['http://localhost:8080', 'http://localhost:8081', 'cars-n-rides.netlify.app'],
+    origin: ['http://localhost:8080', 'http://localhost:8081', 'https://cars-n-rides.netlify.app/'],
     methods: ['GET,HEAD,PUT,PATCH,POST,DELETE'],
     credentials: true
 }));
@@ -82,8 +82,6 @@ router.get("/user-rides", rideMethods.getRidesByUser);
 router.post("/rezervacija", reservationMethods.addReservation); // Add reservation
 router.get("/rezervacija/voznja/:rideId", reservationMethods.getReservationsByRideId); // Get reservations by ride ID
 router.delete("/rezervacija/:id", reservationMethods.deleteReservation); // Delete reservation
-
-
 
 
 // Use the router for API routes
