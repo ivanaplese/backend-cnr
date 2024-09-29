@@ -46,21 +46,21 @@ export const searchRides = async (req, res) => {
     console.log(date);
 
     try {
-        const rideCollection = await getRideCollection(); // Fetch collection
+        const rideCollection = await getRideCollection();
 
         const query = {
             origin: origin || { $exists: true },
             destination: destination || { $exists: true },
         };
 
-        // If a date is provided, create a date range (from start of the day to end of the day)
+
         if (date) {
             const startDate = new Date(date);
-            startDate.setUTCHours(0, 0, 0, 0); // Set to start of the day (00:00:00)
+            startDate.setUTCHours(0, 0, 0, 0);
             const endDate = new Date(date);
-            endDate.setUTCHours(23, 59, 59, 999); // Set to end of the day (23:59:59)
+            endDate.setUTCHours(23, 59, 59, 999);
 
-            query.date = { $gte: startDate, $lte: endDate }; // Add range query for date
+            query.date = { $gte: startDate, $lte: endDate };
         }
 
         const rides = await rideCollection.find(query).toArray();
@@ -86,12 +86,11 @@ export const searchRides = async (req, res) => {
 
 // Dohvaćanje vožnji za određenog korisnika
 export const getRidesByUser = async (req, res) => {
-    const { username } = req.query; // Dohvaćanje username-a iz query parametra
+    const { username } = req.query;
 
     try {
-        const userCollection = await getUserCollection(); // Pretpostavimo da imaš kolekciju korisnika
-        const user = await userCollection.findOne({ username }); // Dohvaćanje korisnika prema username-u
-
+        const userCollection = await getUserCollection();
+        const user = await userCollection.findOne({ username });
         if (!user) {
             return res.status(404).json({ message: "Korisnik nije pronađen." });
         }
@@ -133,7 +132,7 @@ export const updateRide = async (req, res) => {
     const rideId = req.params.id;
     const { origin, destination, date } = req.body;
     try {
-        const rideCollection = await getRideCollection(); // Fetch collection
+        const rideCollection = await getRideCollection();
         const result = await rideCollection.updateOne(
             { _id: new ObjectId(rideId) },
             { $set: { origin, destination, date: new Date(date) } }

@@ -1,7 +1,6 @@
 import db from "../db/connection.js";
 import { ObjectId } from "mongodb";
 
-// const userCollection = db.collection("user");
 
 // ispis usera
 export const getUser = async (req, res) => {

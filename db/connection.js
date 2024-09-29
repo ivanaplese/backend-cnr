@@ -3,8 +3,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const url = process.env.MONGO_URI; // Use the correct environment variable name
-const client = new MongoClient(url); // No need for useNewUrlParser or useUnifiedTopology
+const url = process.env.MONGO_URI;
+const client = new MongoClient(url);
 
 let db;
 
@@ -12,7 +12,7 @@ async function connectDB() {
     if (!db) {
         try {
             await client.connect();
-            db = client.db(process.env.DB_NAME); // Ensure DB_NAME is set correctly in your .env file
+            db = client.db(process.env.DB_NAME);
             console.log("Connected to MongoDB");
         } catch (error) {
             console.error("Failed to connect to MongoDB", error);
