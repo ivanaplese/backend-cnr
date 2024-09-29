@@ -5,7 +5,6 @@ import { userMethods } from "./Handlers/userHandler.js";
 import { rideMethods } from "./Handlers/rideHandler.js";
 import { reservationMethods } from "./Handlers/reservationHandler.js";
 import auth from "./auth.js";
-import jwt from 'jsonwebtoken';
 
 dotenv.config();
 
@@ -84,20 +83,6 @@ router.post("/rezervacija", reservationMethods.addReservation); // Add reservati
 router.get("/rezervacija/voznja/:rideId", reservationMethods.getReservationsByRideId); // Get reservations by ride ID
 router.delete("/rezervacija/:id", reservationMethods.deleteReservation); // Delete reservation
 
-
-// // Middleware for authentication
-// const authenticateToken = (req, res, next) => {
-//     const authHeader = req.headers['authorization'];
-//     const token = authHeader && authHeader.split(' ')[1];
-
-//     if (!token) return res.sendStatus(401); // No token, return 401 Unauthorized
-
-//     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-//         if (err) return res.sendStatus(403); // Invalid token, return 403 Forbidden
-//         req.user = user; // Store user info in request
-//         next(); // Proceed to the next middleware/route
-//     });
-// };
 
 
 
