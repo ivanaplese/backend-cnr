@@ -9,12 +9,13 @@ import auth from "./auth.js";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
+
 
 // CORS middleware
 app.use(cors({
-    origin: ['https://cars-n-rides.netlify.app'],
-    // origin: ['https://cars-n-rides.netlify.app', 'http://localhost:8080', 'http://localhost:8081'],
+    // origin: ['https://cars-n-rides.netlify.app'],
+    origin: ['https://cars-n-rides.netlify.app', 'http://localhost:8080', 'http://localhost:8081'],
     methods: ['GET,HEAD,PUT,PATCH,POST,DELETE'],
     credentials: true
 }));
@@ -66,18 +67,18 @@ router.post("/login", async (req, res) => {
 // Route for getting users, adding users, and other user methods
 router.get("/user", userMethods.getUser); // List users
 router.post("/user", userMethods.newUser); // Add new user
-router.get("/user/:id", userMethods.getUserById); // Get user by ID
-router.get("/user/username/:username", userMethods.getUserByUsername); // Get user by username
+// router.get("/user/:id", userMethods.getUserById); // Get user by ID
+// router.get("/user/username/:username", userMethods.getUserByUsername); // Get user by username
 
 
 // RIDE ROUTES
 
 router.post("/voznja", rideMethods.addRide); // Add ride
 router.get("/voznja", rideMethods.searchRides); // Search rides
-router.get("/voznja/:id", rideMethods.getRideById); // Get ride by ID
-router.put("/voznja/:id", rideMethods.updateRide); // Update ride by ID
-router.delete("/voznja/:id", rideMethods.deleteRide); // Delete ride by ID
-router.get("/user-rides", rideMethods.getRidesByUser);
+// router.get("/voznja/:id", rideMethods.getRideById); // Get ride by ID
+// router.put("/voznja/:id", rideMethods.updateRide); // Update ride by ID
+// router.delete("/voznja/:id", rideMethods.deleteRide); // Delete ride by ID
+// router.get("/user-rides", rideMethods.getRidesByUser);
 
 
 // Use the router for API routes
