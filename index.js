@@ -79,11 +79,6 @@ router.put("/voznja/:id", rideMethods.updateRide); // Update ride by ID
 router.delete("/voznja/:id", rideMethods.deleteRide); // Delete ride by ID
 router.get("/user-rides", rideMethods.getRidesByUser);
 
-// RESERVATION ROUTES
-router.post("/rezervacija", reservationMethods.addReservation); // Add reservation
-router.get("/rezervacija/voznja/:rideId", reservationMethods.getReservationsByRideId); // Get reservations by ride ID
-router.delete("/rezervacija/:id", reservationMethods.deleteReservation); // Delete reservation
-
 
 // Use the router for API routes
 app.use('/api', router);
