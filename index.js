@@ -9,13 +9,13 @@ import auth from "./auth.js";
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8000;
 
 
 // CORS middleware
 app.use(cors({
-    // origin: ['https://cars-n-rides.netlify.app'],
-    origin: ['https://frontend-cnr.onrender.com/', 'http://localhost:8080', 'http://localhost:8081'],
+    origin: ['http://localhost:8081'],
+    // origin: ['https://frontend-cnr.onrender.com/', 'http://localhost:8081', 'http://localhost:8080'],
     methods: ['GET,HEAD,PUT,PATCH,POST,DELETE'],
     credentials: true
 }));
